@@ -11,6 +11,8 @@ hi NonText                      ctermfg=8
 " these values come from fish_color_selection, but it's not possible to create
 " a highlight link from fish_color_selection to Visual
 hi Visual                       ctermfg=7 ctermbg=8 cterm=bold guifg=#c5c8c6 guibg=#666666 gui=bold
+hi Pmenu                        ctermfg=7 ctermbg=NONE guifg=#c8c8c8 guibg=NONE
+hi PmenuSel                     ctermfg=7 ctermbg=8 cterm=bold guifg=#c8c8c8 guibg=#444444 gui=bold
 
 hi fish_color_command           ctermfg=4 guifg=#81a2be
 hi fish_color_comment           ctermfg=1 cterm=italic guifg=#cc6666 gui=italic
