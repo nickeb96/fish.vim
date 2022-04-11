@@ -3,7 +3,7 @@ if exists("b:current_syntax")
 endif
 
 
-syn keyword fishKeywordAcceptsAnother while command builtin skipwhite nextgroup=fishStatement,fishKeywordAcceptsAnother
+syn keyword fishKeywordAcceptsAnother while command builtin skipwhite nextgroup=fishStatement,fishKeywordAcceptsAnother,fishOperator,fishVariable,fishCommandSub
 syn keyword fishForFor for skipwhite nextgroup=fishForVariable
 syn match fishForVariable /[[:alnum:]_-]\+/ contained skipwhite nextgroup=fishForIn
 syn keyword fishForIn in contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
@@ -13,12 +13,12 @@ syn keyword fishKeyword _ argparse begin bg bind block break breakpoint case
     \ read realpath return set set_color source status string switch test time
     \ true type ulimit wait
     \ skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
-syn keyword fishKeywordIf if skipwhite nextgroup=fishStatement,fishKeyword,fishKeywordAcceptsAnother,fishEscapeNl
+syn keyword fishKeywordIf if skipwhite nextgroup=fishStatement,fishKeyword,fishKeywordAcceptsAnother,fishEscapeNl,fishOperator,fishVariable,fishCommandSub
 syn keyword fishKeywordElse else skipwhite nextgroup=fishKeywordIf
+syn match fishStatement /[[:alnum:]_\[][[:alnum:]+._-]*/ skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
+syn match fishArgument '[[:alnum:]\u5b\u5d@:=+.,%/_-]\+' contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
+syn match fishOption /-[[:alnum:]=_-]*/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 syn match fishEscapeNl /\\$/ skipnl skipwhite contained nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
-syn match fishStatement /[[:alnum:]_\[][[:alnum:]_-]*/ skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
-syn match fishArgument '[[:alnum:]:./_-]\+' contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
-syn match fishOption /-[[:alnum:]_-]*/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 syn region fishQuote start=/'/ skip=/\\'/ end=/'/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 syn region fishQuote start=/"/ skip=/\\"/ end=/"/ contains=fishInnerVariable,fishInnerCommandSub contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 syn match fishChar /\\[01234567abefnrtv\[\](){}<>*?~%#$|&;'" ]/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
@@ -28,8 +28,8 @@ syn match fishChar /\\U[0-9a-fA-F]\{8}/ contained skipwhite nextgroup=fishArgume
 syn match fishChar /\\0[0-7]\{1,2}/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 syn match fishChar /\\x[0-7][0-9a-fA-F]\|\\x[0-9a-fA-F]/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 syn match fishChar /\\X[0-9a-fA-F]\{1,2}/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
-syn match fishInnerVariable /\$\+[[:alnum:]_-]\+/ contained
 syn match fishVariable /\$\+[[:alnum:]_-]\+/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
+syn match fishInnerVariable /\$\+[[:alnum:]_-]\+/ contained
 syn match fishRedirection /\(0\|1\|2\|&\)\?\(<\|>\|>>\|>?\)\([[:alnum:]~\/._-]\+\|&0\|&1\|&2\)/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 syn match fishPathGlob /\(\~\|*\|?\)/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 
