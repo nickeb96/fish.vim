@@ -16,7 +16,7 @@ syn keyword fishKeyword _ argparse begin bg bind block break breakpoint case
 syn keyword fishKeywordIf if skipwhite nextgroup=fishStatement,fishKeyword,fishKeywordAcceptsAnother,fishEscapeNl,fishOperator,fishVariable,fishCommandSub
 syn keyword fishKeywordElse else skipwhite nextgroup=fishKeywordIf
 syn match fishStatement /[[:alnum:]_\[][[:alnum:]+._-]*/ skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
-syn match fishArgument '[[:alnum:]\u5b\u5d@:=+.,%/_-]\+' contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
+syn match fishArgument '[[:alnum:]\u5b\u5d@:=+.,%/!_-]\+' contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 syn match fishOption /-[[:alnum:]=_-]*/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 syn match fishEscapeNl /\\$/ skipnl skipwhite contained nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
 syn region fishQuote start=/'/ skip=/\\'/ end=/'/ contained skipwhite nextgroup=fishArgument,fishOption,fishQuote,fishVariable,fishRedirection,fishPathGlob,fishCommandSub,fishEscapeNl,fishChar
