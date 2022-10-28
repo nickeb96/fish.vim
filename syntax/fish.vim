@@ -43,6 +43,10 @@ syn region fishCommandSub start=/\$\?(/ end=/)/ matchgroup=fishCommandSubParenth
 syn region fishInnerCommandSub start=/\$(/ end=/)/ matchgroup=fishCommandSubParenthesis skipwhite contains=fishStatement,fishKeyword,fishKeywordAcceptsAnother,fishTerminator,fishOperator,fishEscapeNl,fishChar
 
 
+syn sync minlines=200
+syn sync maxlines=300
+
+
 " Intermediate highlight groups matching fish_color_* variables
 
 hi def link fishStatement               fish_color_command
