@@ -1,3 +1,8 @@
+" Vim filetype plugin file
+" Language:     fish
+" Maintainer:   Nicholas Boyle (github.com/nickeb96)
+" Repository:   https://github.com/nickeb96/fish.vim
+" Last Change:  February 1, 2023
 
 if exists("b:did_ftplugin")
     finish
@@ -9,4 +14,4 @@ setlocal comments=:#
 setlocal commentstring=#%s
 setlocal indentexpr=fish#Indent()
 setlocal indentkeys+==end,=else,=case
-
+setlocal formatoptions+=crjq

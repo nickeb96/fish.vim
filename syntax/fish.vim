@@ -1,3 +1,9 @@
+" Vim syntax file
+" Language:     fish
+" Maintainer:   Nicholas Boyle (github.com/nickeb96)
+" Repository:   https://github.com/nickeb96/fish.vim
+" Last Change:  February 1, 2023
+
 if exists("b:current_syntax")
     finish
 endif

@@ -1,3 +1,9 @@
+" Vim indent file
+" Language:     fish
+" Maintainer:   Nicholas Boyle (github.com/nickeb96)
+" Repository:   https://github.com/nickeb96/fish.vim
+" Last Change:  February 1, 2023
+
 function! fish#Indent1()
     let l:shiftwidth = shiftwidth()
     let l:prevlnum = prevnonblank(v:lnum - 1)
