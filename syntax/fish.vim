@@ -8,6 +8,9 @@ if exists("b:current_syntax")
     finish
 endif
 
+let s:cpo_save = &cpo
+set cpo&vim
+
 
 " Statements
 syn cluster fishStatement contains=fishKeywordAndOr,fishNot,fishSelectStatement,fishKeyword,fishKeywordIf,fishCommand,fishVariable
@@ -90,7 +93,7 @@ hi def link fishBracedQuote fishQuote
 
 " Arguments
 
-syn cluster fishArgument contains=fishParameter,fishOption,fishVariable,fishPathGlob,fishBraceExpansion,fishQuote,fishChar,fishCommandSub,fishRedirection,fishSelfPid
+syn cluster fishArgument contains=fishParameter,fishOption,fishVariable,fishPathGlob,fishBraceExpansion,fishQuote,fishCharacter,fishCommandSub,fishRedirection,fishSelfPid
 
 syn match   fishParameter '[[:alnum:]\u5b\u5d@:=+.,%/!_-]\+' contained skipwhite nextgroup=@fishNext
 
@@ -124,17 +127,17 @@ syn match   fishEscapedEscape /\\\\/ contained
 syn match   fishEscapedSQuote /\\'/ contained
 syn match   fishEscapedDQuote /\\"/ contained
 syn match   fishEscapedDollar /\\\$/ contained
-hi def link fishEscapedEscape fishChar
-hi def link fishEscapedSQuote fishChar
-hi def link fishEscapedDQuote fishChar
-hi def link fishEscapedDollar fishChar
+hi def link fishEscapedEscape fishCharacter
+hi def link fishEscapedSQuote fishCharacter
+hi def link fishEscapedDQuote fishCharacter
+hi def link fishEscapedDollar fishCharacter
 
-syn match   fishChar /\\[0-7]\{1,3}/                          contained skipwhite nextgroup=@fishNext
-syn match   fishChar /\\u[0-9a-fA-F]\{4}/                     contained skipwhite nextgroup=@fishNext
-syn match   fishChar /\\U[0-9a-fA-F]\{8}/                     contained skipwhite nextgroup=@fishNext
-syn match   fishChar /\\x[0-7][0-9a-fA-F]\|\\x[0-9a-fA-F]/    contained skipwhite nextgroup=@fishNext
-syn match   fishChar /\\X[0-9a-fA-F]\{1,2}/                   contained skipwhite nextgroup=@fishNext
-syn match   fishChar /\\[abcefnrtv[\](){}<>\\*?~%#$|&;'" ]/   contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\[0-7]\{1,3}/                          contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\u[0-9a-fA-F]\{4}/                     contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\U[0-9a-fA-F]\{8}/                     contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\x[0-7][0-9a-fA-F]\|\\x[0-9a-fA-F]/    contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\X[0-9a-fA-F]\{1,2}/                   contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\[abcefnrtv[\](){}<>\\*?~%#$|&;'" ]/   contained skipwhite nextgroup=@fishNext
 
 syn match   fishRedirection /</ contained skipwhite nextgroup=fishRedirectionTarget
 syn match   fishRedirection /[0-9&]\?>[>?]\?/ contained skipwhite nextgroup=fishRedirectionTarget
@@ -186,7 +189,7 @@ syn sync maxlines=300
 hi def link fishCommand                 fish_color_command
 hi def link fishComment                 fish_color_comment
 hi def link fishEnd                     fish_color_end
-hi def link fishChar                    fish_color_escape
+hi def link fishCharacter               fish_color_escape
 hi def link fishKeyword                 fish_color_keyword
 hi def link fishEscapedNl               fish_color_normal
 hi def link fishOperator                fish_color_operator
@@ -217,3 +220,6 @@ hi def link fishTodo                Todo
 
 
 let b:current_syntax = 'fish'
+
+let &cpo = s:cpo_save
+unlet s:cpo_save
