@@ -2,11 +2,10 @@
 " Language:     fish
 " Maintainer:   Nicholas Boyle (github.com/nickeb96)
 " Repository:   https://github.com/nickeb96/fish.vim
-" Last Change:  February 1, 2023
-
+" Last Change:  February 4, 2023
 
 if exists("b:did_indent")
-  finish
+    finish
 endif
 let b:did_indent = 1
 
@@ -62,7 +61,7 @@ function GetFishIndent(lnum)
                 let l:depth = l:depth + 1
             elseif l:currentline =~# '^\s*\(begin\|if\|while\|for\|function\|switch\)\>'
                 let l:depth = l:depth - 1
-            elseif
+            endif
         endwhile
         if l:currentline =~# '^\s*switch\>'
             return indent(l:currentlnum)
