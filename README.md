@@ -56,6 +56,8 @@ Look inside [colors/fish-default.vim](./colors/fish-default.vim) for more exampl
 
 ## Future Plans
 
+- Fix tilde being highlighted wrong in `cmd text~`
+- Add support for new `VAR=val command` syntax
 - Add support for folding and concealing
 - Fix any remaining discrepancies in syntax highlighting
 - Add auto-formatting support with `fish_indent`
