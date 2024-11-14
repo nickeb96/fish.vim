@@ -42,11 +42,7 @@ syn keyword fishKeywordIn in contained skipwhite nextgroup=@fishArgument
 hi def link fishForVariable fishParameter
 hi def link fishKeywordIn fishKeyword
 
-syn keyword fishKeyword _ abbr argparse begin bg bind block break breakpoint cd commandline
-    \ complete continue count disown echo emit eval exec exit false fg function functions
-    \ history jobs math printf pwd random read realpath return set set_color source status
-    \ string test time true type ulimit wait
-    \ skipwhite nextgroup=@fishNext
+syn keyword fishKeyword begin break continue exec function return time skipwhite nextgroup=@fishNext
 syn match   fishKeyword /\<contains\>/ skipwhite nextgroup=@fishNext
 
 syn match   fishCommand /[[:alnum:]_\/[][[:alnum:]+._-]*/ skipwhite nextgroup=@fishNext

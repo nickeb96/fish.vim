@@ -62,4 +62,6 @@ Look inside [colors/fish-default.vim](./colors/fish-default.vim) for more exampl
 - Fix any remaining discrepancies in syntax highlighting
 - Add auto-formatting support with `fish_indent`
 - Possibly add completion support
+- Fix `<&0` not working
+- Fix highlighting breaking with `echo ('...')`
 
