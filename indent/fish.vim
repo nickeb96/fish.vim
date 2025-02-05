@@ -12,6 +12,8 @@ let b:did_indent = 1
 setlocal indentexpr=GetFishIndent(v:lnum)
 setlocal indentkeys+==end,=else,=case
 
+let b:undo_indent = "setlocal indentexpr< indentkeys<"
+
 function s:PrevCmdStart(linenum)
     let l:linenum = a:linenum
     " look for the first line that isn't a line continuation

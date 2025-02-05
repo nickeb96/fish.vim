@@ -13,3 +13,5 @@ setlocal iskeyword=@,48-57,_,192-255,-,.
 setlocal comments=:#
 setlocal commentstring=#\ %s
 setlocal formatoptions+=crjq
+
+let b:undo_ftplugin = "setl cms< com< fo< isk<"

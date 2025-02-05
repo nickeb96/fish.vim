@@ -64,4 +64,5 @@ Look inside [colors/fish-default.vim](./colors/fish-default.vim) for more exampl
 - Possibly add completion support
 - Fix `<&0` not working
 - Fix highlighting breaking with `echo ('...')`
+- Fix `time` being highlighted as a command instead of special cased
 
