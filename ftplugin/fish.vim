@@ -15,3 +15,7 @@ setlocal commentstring=#\ %s
 setlocal formatoptions+=crjq
 
 let b:undo_ftplugin = "setl cms< com< fo< isk<"
+
+let b:match_words = '\<\%(else\s\+\)\@<!if\>\|\<\%(begin\|function\|switch\|while\|for\)\>' .
+                  \ ':\<else\s\+if\>\|\<else\>\|\<case\>' .
+                  \ ':\<end\>'
