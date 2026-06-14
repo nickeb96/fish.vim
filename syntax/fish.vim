@@ -3,6 +3,7 @@
 " Maintainer:   Nicholas Boyle (github.com/nickeb96)
 " Repository:   https://github.com/nickeb96/fish.vim
 " Last Change:  February 1, 2023
+"               June 14, 2026
 
 if exists("b:current_syntax")
     finish
@@ -13,7 +14,11 @@ set cpo&vim
 
 
 " Statements
-syn cluster fishStatement contains=fishKeywordAndOr,fishNot,fishSelectStatement,fishKeyword,fishKeywordIf,fishCommand,fishVariable
+
+syn cluster fishStatement contains=fishTime,fishKeywordAndOr,fishNot,fishSelectStatement,fishKeyword,fishKeywordIf,fishCommand
+
+syn keyword fishTime time skipwhite nextgroup=@fishStatement
+hi def link fishTime fishOperator
 
 syn keyword fishKeywordAndOr and or nextgroup=fishNot,fishSelectStatement,fishKeyword,fishKeywordIf,fishCommand
 hi def link fishKeywordAndOr fishOperator
@@ -42,10 +47,21 @@ syn keyword fishKeywordIn in contained skipwhite nextgroup=@fishArgument
 hi def link fishForVariable fishParameter
 hi def link fishKeywordIn fishKeyword
 
-syn keyword fishKeyword begin break continue exec function return time skipwhite nextgroup=@fishNext
+syn keyword fishKeyword begin break continue exec function return skipwhite nextgroup=@fishNext
 syn match   fishKeyword /\<contains\>/ skipwhite nextgroup=@fishNext
 
-syn match   fishCommand /[[:alnum:]_\/[][[:alnum:]+._-]*/ skipwhite nextgroup=@fishNext
+syn match   fishCommand '[[\][:alnum:]_/\\+._~$-]\+' contains=fishInnerVariable,fishInnerUserHome skipwhite nextgroup=@fishNext
+
+
+" Variable Assignment Prefix (VAR=val printenv VAR) (added in fish 3.1)
+
+syn match   fishVarLValue /[[:alnum:]_]\+=/me=e-1,he=e-1 nextgroup=fishVarRValue
+hi def link fishVarLValue fishParameter
+
+" the 'start=' option needs to come directly after 'matchgroup=' for it be highlighted
+" as 'fishOperator' without 'end=' being affected
+syn region  fishVarRValue end=/[ \t]/ matchgroup=fishOperator start=/=/ contained contains=@fishArgument
+    \ skipwhite nextgroup=@fishStatement
 
 
 " Internally Nested Arguments
@@ -66,6 +82,9 @@ hi def link fishIndexNum fishParameter
 syn match   fishIndexRange /\.\./ contained
 hi def link fishIndexRange fishParameter
 
+syn match   fishInnerUserHome /\~/ contained
+hi def link fishInnerUserHome fishUserHome
+
 syn region  fishInnerCommandSub matchgroup=fishOperator start=/(/ start=/\$(/ end=/)/ contained
     \ contains=@fishStatement
 hi def link fishInnerCommandSub fishCommandSub
@@ -77,7 +96,7 @@ hi def link fishQuotedCommandSub fishCommandSub
 syn match   fishBraceExpansionComma /,/ contained
 hi def link fishBraceExpansionComma fishOperator
 
-syn match   fishBracedParameter '[[:alnum:]\u5b\u5d@:=+.%/!_-]\+' contained contains=fishInnerPathGlob
+syn match   fishBracedParameter '[[:alnum:]\u5b\u5d@:=+.^`~%/!_-]\+' contained contains=fishInnerPathGlob
 hi def link fishBracedParameter fishParameter
 
 syn region  fishBracedQuote start=/'/ skip=/\\'/ end=/'/ contained
@@ -89,20 +108,28 @@ hi def link fishBracedQuote fishQuote
 
 " Arguments
 
-syn cluster fishArgument contains=fishParameter,fishOption,fishVariable,fishPathGlob,fishBraceExpansion,fishQuote,fishCharacter,fishCommandSub,fishRedirection,fishSelfPid
+syn cluster fishArgument contains=fishParameter,fishOption,fishVariable,fishPathGlob,fishUserHome,fishBraceExpansion,fishQuote,fishCharacter,fishCommandSub,fishRedirection,fishSelfPid
 
-syn match   fishParameter '[[:alnum:]\u5b\u5d@:=+.,%/!_-]\+' contained skipwhite nextgroup=@fishNext
+syn match   fishParameter '[[:alnum:]\u5b\u5d@:=+.,^`~%/!_?-]\+' contained skipwhite nextgroup=@fishNext
+
+" non-special escape chars are highlighted as parameters
+syn match   fishParameter /\\[dg-qswyzA-TVWYZ,./=+_`!@-]/ contained skipwhite nextgroup=@fishNext
+
+" embedded bg tokens are treated as normal parameters since fish 3.5
+syn match   fishParameter /&[^ \t]/me=e-1,he=e-1 contained skipwhite nextgroup=@fishNext
 
 syn match   fishOption /-[[:alnum:]=_-]*/ contained skipwhite nextgroup=@fishNext
 
-syn match   fishPathGlob /\(\~\|*\|?\)/ contained skipwhite nextgroup=@fishNext
+syn match   fishPathGlob /\*/ contained skipwhite nextgroup=@fishNext
+
+syn match   fishUserHome /\~/ contained skipwhite nextgroup=@fishNext
 
 syn region  fishBraceExpansion matchgroup=fishOperator start=/{/ end=/}/ contained
     \ contains=fishBraceExpansionComma,fishInnerVariable,fishInnerCommandSub,fishBracedParameter,fishBracedQuote
     \ skipwhite nextgroup=@fishNext
 
-syn match   fishVariable /\$\+[[:alnum:]_]\+/ skipwhite nextgroup=@fishNext
-syn match   fishVariable /\$\+[[:alnum:]_]\+\[/me=e-1,he=e-1 nextgroup=fishSubscript
+syn match   fishVariable /\$\+[[:alnum:]_]\+/ contained skipwhite nextgroup=@fishNext
+syn match   fishVariable /\$\+[[:alnum:]_]\+\[/me=e-1,he=e-1 contained nextgroup=fishSubscript
 
 syn region  fishSubscript matchgroup=fishVariable start=/\[/ end=/]/ contained
     \ keepend contains=@fishSubscriptArgs
@@ -128,21 +155,23 @@ hi def link fishEscapedSQuote fishCharacter
 hi def link fishEscapedDQuote fishCharacter
 hi def link fishEscapedDollar fishCharacter
 
-syn match   fishCharacter /\\[0-7]\{1,3}/                          contained skipwhite nextgroup=@fishNext
-syn match   fishCharacter /\\u[0-9a-fA-F]\{4}/                     contained skipwhite nextgroup=@fishNext
-syn match   fishCharacter /\\U[0-9a-fA-F]\{8}/                     contained skipwhite nextgroup=@fishNext
-syn match   fishCharacter /\\x[0-7][0-9a-fA-F]\|\\x[0-9a-fA-F]/    contained skipwhite nextgroup=@fishNext
-syn match   fishCharacter /\\X[0-9a-fA-F]\{1,2}/                   contained skipwhite nextgroup=@fishNext
-syn match   fishCharacter /\\[abcefnrtv[\](){}<>\\*?~%#$|&;'" ]/   contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\[0-7]\{1,3}/                           contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\u[0-9a-fA-F]\{4}/                      contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\U[0-9a-fA-F]\{8}/                      contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\x[0-7][0-9a-fA-F]/                     contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\x[0-9a-fA-F]/                          contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\X[0-9a-fA-F]\{1,2}/                    contained skipwhite nextgroup=@fishNext
+syn match   fishCharacter /\\[abcefnrtv[\](){}<>\\*?~%^#$|&;'" ]/   contained skipwhite nextgroup=@fishNext
 
 syn match   fishRedirection /</ contained skipwhite nextgroup=fishRedirectionTarget
+syn match   fishRedirection /<&[0-9-]/ contained skipwhite nextgroup=@fishNext
 syn match   fishRedirection /[0-9&]\?>[>?]\?/ contained skipwhite nextgroup=fishRedirectionTarget
 syn match   fishRedirection /[0-9&]\?>&[0-9-]/ contained skipwhite nextgroup=@fishNext
 
-syn match   fishRedirectionTarget /[[:alnum:]$~*?{,}"'\/._-]\+/ contained contains=fishInnerVariable skipwhite nextgroup=@fishNext
+syn match   fishRedirectionTarget /[[:alnum:]$~*?{,}"'\/.+%_-]\+/ contained contains=fishInnerVariable skipwhite nextgroup=@fishNext
 hi def link fishRedirectionTarget fishRedirection
 
-syn match fishSelfPid /%self\>/ contained nextgroup=@fishNext
+syn match   fishSelfPid /%self\>/ contained skipwhite nextgroup=@fishNext
 hi def link fishSelfPid fishOperator
 
 
@@ -154,7 +183,7 @@ syn match   fishPipe /\(1>\|2>\|&\)\?|/ contained skipwhite nextgroup=@fishState
 hi def link fishPipe fishEnd
 
 syn match   fishBackgroundJob /&$/ contained skipwhite nextgroup=@fishStatement
-syn match   fishBackgroundJob /&[^<>&|]/me=s+1,he=s+1 contained skipwhite nextgroup=@fishStatement
+syn match   fishBackgroundJob /&[ \t]/me=s+1,he=s+1 contained skipwhite nextgroup=@fishStatement
 hi def link fishBackgroundJob fishEnd
 
 syn match   fishSemicolon /;/ skipwhite nextgroup=@fishStatement
@@ -168,7 +197,7 @@ hi def link fishSymbolicAndOr fishOperator
 
 syn cluster fishNext contains=fishEscapedNl,@fishArgument,@fishTerminator
 
-syn match   fishEscapedNl /\\$/ skipnl skipwhite contained nextgroup=@fishNext
+syn match   fishEscapedNl /\\$/ skipnl contained skipwhite nextgroup=@fishNext
 
 syn match   fishComment /#.*/ contains=fishTodo,@Spell
 
@@ -190,8 +219,8 @@ hi def link fishKeyword                 fish_color_keyword
 hi def link fishEscapedNl               fish_color_normal
 hi def link fishOperator                fish_color_operator
 hi def link fishVariable                fish_color_operator
-hi def link fishInnerVariable           fish_color_operator
 hi def link fishPathGlob                fish_color_operator
+hi def link fishUserHome                fish_color_operator
 hi def link fishOption                  fish_color_option
 hi def link fishParameter               fish_color_param
 hi def link fishQuote                   fish_color_quote
