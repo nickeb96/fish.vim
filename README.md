@@ -1,8 +1,15 @@
 # fish.vim
 
-This is a Vim/Neovim plugin that provides Fish syntax highlighting, automatic indentation as you type, file detection, and a colorscheme matching Fish's default shell highlighting.
+This is a Vim/Neovim plugin for Fish that provides:
 
-The syntax highlighting is very close to how fish highlights text in an interactive shell.  Try comparing `type fish_prompt` and `funced --editor=vim fish_prompt` (or `--editor=nvim` if you use Neovim).  They should be exactly the same or very similar, assuming your fish and vim colors match.
+- syntax highlighting
+- automatic indentation as you type and with the `=` operator
+- autocomplete via [`omnicomplete`](https://vimhelp.org/insert.txt.html#compl-omni) (`CTRL-X CTRL-O` in insert mode)
+- optional default settings for `tabstop`, `softtabstop`, and `shiftwidth` (enable with [`let g:fish_recommended_style = 1`](https://vimhelp.org/usr_51.txt.html#ft_recommended_style))
+- file detection
+- colorscheme matching Fish's default shell highlighting.
+
+The syntax highlighting is very close to how fish highlights text in an interactive shell.  Try comparing `type fish_prompt` and `funced --editor=vim fish_prompt` (or `--editor=nvim` if you use Neovim).  They should be exactly the same, assuming your fish and vim colors match.
 
 #### Example (left is a shell, right is vim):
 
@@ -56,13 +63,7 @@ Look inside [colors/fish-default.vim](./colors/fish-default.vim) for more exampl
 
 ## Future Plans
 
-- Fix tilde being highlighted wrong in `cmd text~`
-- Add support for new `VAR=val command` syntax
-- Add support for folding and concealing
-- Fix any remaining discrepancies in syntax highlighting
+- Add support for folding
 - Add auto-formatting support with `fish_indent`
-- Possibly add completion support
-- Fix `<&0` not working
-- Fix highlighting breaking with `echo ('...')`
-- Fix `time` being highlighted as a command instead of special cased
+- Find and fix any remaining discrepancies in syntax highlighting
 
