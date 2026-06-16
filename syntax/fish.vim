@@ -2,8 +2,8 @@
 " Language:     fish
 " Maintainer:   Nicholas Boyle (github.com/nickeb96)
 " Repository:   https://github.com/nickeb96/fish.vim
-" Last Change:  February 1, 2023
-"               June 14, 2026
+" Last Change:  2023 Feb 1
+"               2026 Jun 14
 
 if exists("b:current_syntax")
     finish
