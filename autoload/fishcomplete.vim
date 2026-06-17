@@ -16,7 +16,7 @@ function fishcomplete#Complete(findstart, base)
         endif
     elseif a:findstart == 0
         let l:line = strpart(getline('.'), 0, col('.') - 1)
-        let l:entries = s:completeFishCmd(l:line .. a:base)
+        let l:entries = s:CompleteFishCmd(l:line .. a:base)
         let l:complete_items = []
         for l:entry in l:entries
             let l:split_entry = split(l:entry, '\t')
@@ -27,7 +27,13 @@ function fishcomplete#Complete(findstart, base)
     endif
 endfunction
 
-function s:completeFishCmd(cmd)
-    let l:completion_query = escape(escape(a:cmd, "'\\"), "\\")
-    return systemlist("fish -c 'complete -C \\'" .. l:completion_query .. "\\''")
+function s:CompleteFishCmd(cmd)
+    let l:completion_query = "complete -C '" .. escape(a:cmd, "'\\") .. "'"
+    if &shell == "fish"
+        return systemlist(l:completion_query)
+    elseif executable("fish")
+        return systemlist("fish", l:completion_query)
+    else
+        return []
+    endif
 endfunction
